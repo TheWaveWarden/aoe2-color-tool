@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="VQhzSw" name="AoE2DE Custom Colors" projectType="guiapp"
+              useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="0"
+              jucerFormatVersion="1">
+  <MAINGROUP id="y8gEkH" name="AoE2DE Custom Colors">
+    <GROUP id="{4B101E76-F62B-9FE8-61F3-79BB5AAAB76E}" name="Source">
+      <FILE id="KKRSry" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="LAHuQJ" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="WEYSno" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+    </GROUP>
+    <FILE id="vPfKC3" name="info.json" compile="0" resource="1" file="Assets/info.json"/>
+    <FILE id="kvdzPG" name="playercolor_red.pal" compile="0" resource="1"
+          file="Assets/playercolor_red.pal"/>
+    <FILE id="ACpNqD" name="thumbnail.jpg" compile="0" resource="1" file="Assets/thumbnail.jpg"/>
+    <FILE id="nvkKhk" name="UIColors.json" compile="0" resource="1" file="Assets/UIColors.json"/>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+  <EXPORTFORMATS>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="AoE2DE Custom Colors"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="AoE2DE Custom Colors"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2019>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>

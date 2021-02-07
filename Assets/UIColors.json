@@ -1,0 +1,91 @@
+{
+  "PresetColors": {
+    "ScoreInfoText": [ 213, 213, 213, 255 ]
+  },
+
+  "ColorTables": {
+    "Blue": {
+      "Text": [ 110, 166, 235, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 0, 0, 255, 255 ],
+      "HealthBar": [ 110, 166, 235, 255 ],
+      "TimelineDark": [ 60, 60, 150, 255 ],
+      "TimelineLight": [ 75, 74, 200, 255 ],
+      "MiniMap": [ 0, 0, 255, 255 ]
+    },
+    "Red": {
+      "Text": [ 255, 100, 100, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 255, 0, 0, 255 ],
+      "HealthBar": [ 255, 100, 100, 255 ],
+      "TimelineDark": [ 160, 35, 35, 255 ],
+      "TimelineLight": [ 200, 35, 35, 255 ],
+      "MiniMap": [ 254, 0, 0, 255 ]
+    },
+    "Green": {
+      "Text": [ 0, 255, 0, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 0, 255, 0, 255 ],
+      "HealthBar": [ 0, 255, 0, 255 ],
+      "TimelineDark": [ 45, 135, 45, 255 ],
+      "TimelineLight": [ 35, 200, 35, 255 ],
+      "MiniMap": [ 0, 255, 0, 255 ]
+    },
+    "Yellow": {
+      "Text": [ 255, 255, 0, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 215, 215, 30, 255 ],
+      "HealthBar": [ 255, 255, 0, 255 ],
+      "TimelineDark": [ 150, 150, 20, 255 ],
+      "TimelineLight": [ 200, 200, 25, 255 ],
+      "MiniMap": [ 255, 255, 1, 255 ]
+    },
+    "Aqua": {
+      "Text": [ 0, 255, 225, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 126, 242, 225, 255 ],
+      "HealthBar": [ 0, 255, 225, 255 ],
+      "TimelineDark": [ 60, 140, 140, 255 ],
+      "TimelineLight": [ 35, 175, 175, 255 ],
+      "MiniMap": [ 0, 255, 225, 255 ]
+    },
+    "Purple": {
+      "Text": [ 241, 108, 232, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 150, 15, 250, 255 ],
+      "HealthBar": [ 241, 108, 232, 255 ],
+      "TimelineDark": [ 140, 45, 140, 255 ],
+      "TimelineLight": [ 200, 35, 200, 255 ],
+      "MiniMap": [ 255, 0, 255, 255 ]
+    },
+    "Grey": {
+      "Text": [ 152, 152, 152, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 100, 100, 100, 255 ],
+      "HealthBar": [ 100, 100, 100, 255 ],
+      "TimelineDark": [ 64, 64, 64, 255 ],
+      "TimelineLight": [ 136, 136, 136, 255 ],
+      "MiniMap": [ 67, 67, 67, 255 ]
+    },
+    "Orange": {
+      "Text": [ 255, 180, 21, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 255, 180, 21, 255 ],
+      "HealthBar": [ 255, 150, 5, 255 ],
+      "TimelineDark": [ 145, 85, 20, 255 ],
+      "TimelineLight": [ 200, 130, 50, 255 ],
+      "MiniMap": [ 255, 130, 1, 255 ]
+    },
+    "White": {
+      "Text": [ 232, 238, 255, 255 ],
+      "TextOutline": [ 0, 0, 0, 255 ],
+      "Icons": [ 232, 238, 255, 255 ],
+      "HealthBar": [ 232, 238, 255, 255 ],
+      "TimelineDark": [ 200, 200, 200, 255 ],
+      "TimelineLight": [ 255, 255, 255, 255 ],
+      "MiniMap": [ 255, 255, 255, 255 ]
+    }
+  }
+
+
+}
