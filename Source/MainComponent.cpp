@@ -317,7 +317,7 @@ void MainComponent::mod_color() {
     if (color_name_ui == "Teal") {
         color_name_ui = "Aqua";
     }
-
+{//todo remove
     //create backup of UIColors to read from
     auto ui_colors_original = m_local_mods_folder.getChildFile(MOD_FOLDER_NAME).getChildFile("widgetui").getChildFile("UIColors.json");
     auto ui_colors_tmp = m_local_mods_folder.getChildFile(MOD_FOLDER_NAME).getChildFile("widgetui").getChildFile("UIColors_temp.json");
@@ -380,6 +380,49 @@ void MainComponent::mod_color() {
     }
     ifs.close();
     ofs.close();
+}//todo remove
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //create backup of bina file to read from (contains healthbar colors)
+    auto bina_original = m_local_mods_folder.getChildFile(MOD_FOLDER_NAME).getChildFile("resources").getChildFile("_common").getChildFile("drs").getChildFile("interface").getChildFile("50500.bina");
+    auto bina_tmp = m_local_mods_folder.getChildFile(MOD_FOLDER_NAME).getChildFile("resources").getChildFile("_common").getChildFile("drs").getChildFile("interface").getChildFile("50500_tmp.bina");
+    bina_original.copyFileTo(bina_tmp);
+
+
+    ifs = std::ifstream(bina_tmp.getFullPathName().toStdString());
+    ofs = std::ofstream (bina_original.getFullPathName().toStdString());
+
+    size_t line_counter = 1;
+    while(std::getline(ifs, line))
+    {
+        if(line_counter == m_healthbar_position_in_bina_file[m_player_selector.getSelectedId()]) {
+            ofs << selected_rgb.r << " " << selected_rgb.g << " " << selected_rgb.b << std::endl;
+        } else {
+            ofs << line << std::endl;
+        }
+
+        ++line_counter;
+    }
+    ifs.close();
+    ofs.close();
+
+
+
+
+
+
+
 
 
 
@@ -403,6 +446,9 @@ void MainComponent::create_mod_skeleton() {
     auto palette_dir = m_local_mods_folder.getChildFile(MOD_FOLDER_NAME).getChildFile("resources").getChildFile("_common").getChildFile("palettes");
     palette_dir.createDirectory();
 
+    auto interface_dir = m_local_mods_folder.getChildFile(MOD_FOLDER_NAME).getChildFile("resources").getChildFile("_common").getChildFile("drs").getChildFile("interface");
+    interface_dir.createDirectory();
+
     auto widget_dir = m_local_mods_folder.getChildFile(MOD_FOLDER_NAME).getChildFile("widgetui");
     widget_dir.createDirectory();
 
@@ -422,6 +468,13 @@ void MainComponent::create_mod_skeleton() {
     output_file_info_stream.write(info_stream.getData(), info_stream.getDataSize());
     output_file_info_stream.flush();
 
+    //copy over bina file (contains healthbar colors)
+    juce::MemoryInputStream bina_stream(BinaryData::_50500_bina, BinaryData::_50500_binaSize, false);
+    auto output_file_bina = interface_dir.getChildFile("50500.bina");
+    juce::FileOutputStream output_file_bina_stream(output_file_bina);
+    output_file_bina_stream.setPosition(0);
+    output_file_bina_stream.write(bina_stream.getData(), bina_stream.getDataSize());
+    output_file_bina_stream.flush();
 
     //copy over thumbnail
     juce::MemoryInputStream thumbnail_stream(BinaryData::thumbnail_jpg, BinaryData::thumbnail_jpgSize, false);

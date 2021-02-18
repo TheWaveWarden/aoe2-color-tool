@@ -10,6 +10,7 @@
       <FILE id="WEYSno" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
     </GROUP>
+    <FILE id="KLrl1B" name="50500.bina" compile="0" resource="1" file="Assets/50500.bina"/>
     <FILE id="vPfKC3" name="info.json" compile="0" resource="1" file="Assets/info.json"/>
     <FILE id="kvdzPG" name="playercolor_red.pal" compile="0" resource="1"
           file="Assets/playercolor_red.pal"/>
