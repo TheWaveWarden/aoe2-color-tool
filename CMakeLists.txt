@@ -11,7 +11,8 @@ target_sources(AoE2ColorTool
     PRIVATE
         src/Main.cpp
         src/MainComponent.cpp
-        src/ColourModder.cpp)
+        src/ColourModder.cpp
+        src/ColourButton.cpp)
 
 target_compile_definitions(AoE2ColorTool
     PRIVATE

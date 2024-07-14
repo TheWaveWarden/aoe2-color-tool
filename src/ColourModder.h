@@ -23,7 +23,9 @@ public:
 	bool modFolderExists();
 	void createModSkeleton();
 	void removeMod();
-	void modColour(int p_id, juce::Colour p_col);
+	void modColour (int p_id, juce::Colour p_col);
+
+	juce::Colour getColourFor (int p_index) const;
 
 private:
 	juce::File m_local_mods_folder;

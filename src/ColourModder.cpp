@@ -360,9 +360,9 @@ void ColourModder::modColour (int p_id, juce::Colour p_col) {
 	ifs.close();
 	ofs.close();
 
-	std::string message = "Successfully updated color!";
+	juce::String message;
 	if (created_mod) {
-		message = "Created local mod. You can disable the mod anytime in the ingame mod-browser. " + message;
+		message = "Successfully created local mod. The mod will show up in your in-game mod browser. You candisable it there anytime.\n\n Restart AoE2:DE for the mod to be picked up.";
 	}
 
 	juce::AlertWindow::showMessageBox (
@@ -433,4 +433,8 @@ void ColourModder::removeMod() {
 			DBG ("file was NOT deleted!");
 		}
 	}
+}
+
+juce::Colour ColourModder::getColourFor (int p_index) const {
+	return juce::Colours::red;
 }
