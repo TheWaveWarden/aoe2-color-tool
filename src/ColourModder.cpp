@@ -1,4 +1,5 @@
 #include "ColourModder.h"
+#include "../json/include/nlohmann/json.hpp"
 #include <fstream>
 
 float min3 (float p_a, float p_b, float p_c) {
@@ -129,7 +130,7 @@ ColourModder::ColourModder() {
 		    juce::AlertWindow::AlertIconType::WarningIcon,
 		    "Path not found",
 		    "The path " + m_local_mods_folder.getFullPathName() + " was not found. The tool will not work as intended!",
-		    "Shit!");
+		    "Ok!");
 		return;
 	}
 
@@ -140,7 +141,7 @@ ColourModder::ColourModder() {
 		    juce::AlertWindow::AlertIconType::WarningIcon,
 		    "Path not found",
 		    "The path " + m_local_mods_folder.getFullPathName() + " was not found. The tool will not work as intended!",
-		    "Shit!");
+		    "Ok!");
 	}
 
 	m_local_mods_folder = m_local_mods_folder.getChildFile ("Age of Empires 2 DE");
@@ -150,7 +151,7 @@ ColourModder::ColourModder() {
 		    juce::AlertWindow::AlertIconType::WarningIcon,
 		    "Path not found",
 		    "The path " + m_local_mods_folder.getFullPathName() + " was not found. The tool will not work as intended!",
-		    "Shit!");
+		    "Ok!");
 		return;
 	}
 
@@ -172,7 +173,7 @@ ColourModder::ColourModder() {
 		    juce::AlertWindow::AlertIconType::WarningIcon,
 		    "Path not found",
 		    "The random number path in " + m_local_mods_folder.getFullPathName() + " was not found. The tool will not work as intended!",
-		    "Shit!");
+		    "Ok!");
 		return;
 	}
 
@@ -183,7 +184,7 @@ ColourModder::ColourModder() {
 		    juce::AlertWindow::AlertIconType::WarningIcon,
 		    "Path not found",
 		    "The path " + m_local_mods_folder.getFullPathName() + " was not found. The tool will not work as intended!",
-		    "Shit!");
+		    "Ok!");
 		return;
 	}
 
@@ -194,9 +195,51 @@ ColourModder::ColourModder() {
 		    juce::AlertWindow::AlertIconType::WarningIcon,
 		    "Path not found",
 		    "The path " + m_local_mods_folder.getFullPathName() + " was not found. The tool will not work as intended!",
-		    "Shit!");
+		    "Ok!");
 		return;
 	}
+}
+
+void ColourModder::createSpriteMod (std::array<juce::Colour, 8> p_team_colours, std::array<juce::Colour, 8> p_outline_colours) {
+
+	for (int player = 0; player < 8; ++player)
+		modColour (player + 1, p_team_colours[player]);
+
+	auto palette_folder = m_local_mods_folder.getChildFile (MOD_FOLDER_NAME).getChildFile ("resources").getChildFile ("_common").getChildFile ("palettes");
+
+	//juce::URL (palette_folder.getFullPathName()).launchInDefaultBrowser();
+
+	if (!palette_folder.isDirectory()) {
+		juce::AlertWindow::showMessageBox (
+		    juce::AlertWindow::AlertIconType::WarningIcon,
+		    "Unable to find palette folder: " + palette_folder.getFullPathName().toStdString(),
+		    "Ok!");
+		return;
+	}
+
+	auto data = nlohmann::json::parse (juce::String::createStringFromData (BinaryData::spritecolors_json, BinaryData::spritecolors_jsonSize).toStdString());
+	for (int player = 0; player < 8; ++player) {
+		auto& teamColourData    = data["TeamColors"][std::string ("Player ") + std::to_string (player + 1)]["FloatRGBA"];
+		auto& outlineColourData = data["OutlineColors"][std::string ("Player ") + std::to_string (player + 1)]["FloatRGBA"];
+
+		teamColourData["r"] = p_team_colours[player].getFloatRed();
+		teamColourData["g"] = p_team_colours[player].getFloatGreen();
+		teamColourData["b"] = p_team_colours[player].getFloatBlue();
+
+		outlineColourData["r"] = p_outline_colours[player].getFloatRed();
+		outlineColourData["g"] = p_outline_colours[player].getFloatGreen();
+		outlineColourData["b"] = p_outline_colours[player].getFloatBlue();
+	}
+
+	auto output_file = palette_folder.getChildFile ("spritecolors.json");
+	output_file.replaceWithText (data.dump (4));
+
+	juce::String message = "Successfully created a local mod. The mod will show up in your in-game mod browser. You candisable it there anytime or remove it here in the tool.\n\nRestart AoE2:DE for the mod to be picked up.";
+
+	juce::AlertWindow::showMessageBox (
+	    juce::AlertWindow::AlertIconType::InfoIcon,
+	    "Created Mod Successfully! 14!",
+	    message);
 }
 
 void ColourModder::modColour (int p_id, juce::Colour p_col) {
@@ -211,7 +254,7 @@ void ColourModder::modColour (int p_id, juce::Colour p_col) {
 		juce::AlertWindow::showMessageBox (
 		    juce::AlertWindow::AlertIconType::WarningIcon,
 		    "Unable to find palette folder: " + palette_folder.getFullPathName().toStdString(),
-		    "Shit!");
+		    "Ok!");
 		return;
 	}
 
@@ -359,16 +402,6 @@ void ColourModder::modColour (int p_id, juce::Colour p_col) {
 	}
 	ifs.close();
 	ofs.close();
-
-	juce::String message;
-	if (created_mod) {
-		message = "Successfully created local mod. The mod will show up in your in-game mod browser. You candisable it there anytime.\n\n Restart AoE2:DE for the mod to be picked up.";
-	}
-
-	juce::AlertWindow::showMessageBox (
-	    juce::AlertWindow::AlertIconType::InfoIcon,
-	    "Sucess!",
-	    message);
 }
 
 bool ColourModder::modFolderExists() {
@@ -422,7 +455,7 @@ void ColourModder::createModSkeleton() {
 void ColourModder::removeMod() {
 	if (juce::AlertWindow::showOkCancelBox (juce::AlertWindow::WarningIcon,
 	                                        "Delete Modded Colors",
-	                                        "Are you sure you want to delete all the previously modded colors and return to the original AoE2:DE color scheme?",
+	                                        "Are you sure you want to delete the previously created color mod?",
 	                                        {},
 	                                        {},
 	                                        {})) {
@@ -436,5 +469,20 @@ void ColourModder::removeMod() {
 }
 
 juce::Colour ColourModder::getColourFor (int p_index) const {
-	return juce::Colours::red;
+	auto sprite_colors_file = m_local_mods_folder.getChildFile (MOD_FOLDER_NAME).getChildFile ("resources").getChildFile ("_common").getChildFile ("palettes").getChildFile ("spritecolors.json");
+	auto mod_exists         = sprite_colors_file.existsAsFile();
+
+	nlohmann::json data;
+
+	std::string data_index = (p_index >= 8 ? "OutlineColors" : "TeamColors");
+	if (p_index >= 8)
+		p_index -= 8;
+
+	if (!mod_exists)
+		data = nlohmann::json::parse (juce::String::createStringFromData (BinaryData::spritecolors_json, BinaryData::spritecolors_jsonSize).toStdString());
+	else
+		data = nlohmann::json::parse (sprite_colors_file.loadFileAsString().toStdString());
+
+	auto& colourData = data[data_index][std::string ("Player ") + std::to_string (p_index + 1)]["FloatRGBA"];
+	return juce::Colour::fromFloatRGBA (colourData["r"].get<float>(), colourData["g"].get<float>(), colourData["b"].get<float>(), 1.0f);
 }

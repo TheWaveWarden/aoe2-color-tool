@@ -25,6 +25,8 @@ public:
 	void removeMod();
 	void modColour (int p_id, juce::Colour p_col);
 
+	void createSpriteMod (std::array<juce::Colour, 8> p_team_colours, std::array<juce::Colour, 8> p_outline_colours);
+
 	juce::Colour getColourFor (int p_index) const;
 
 private:

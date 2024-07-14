@@ -1,7 +1,9 @@
 #include "MainComponent.h"
 
 MainComponent::MainComponent() :
-    m_colour_picker (juce::ColourSelector::ColourSelectorOptions::showColourAtTop | juce::ColourSelector::ColourSelectorOptions::showColourspace), m_mod_button (MOD_BUTTON_TEXT), m_clear_button (CLEAR_BUTTON_TEXT) {
+    m_colour_picker (juce::ColourSelector::ColourSelectorOptions::showColourAtTop | juce::ColourSelector::ColourSelectorOptions::showColourspace | juce::ColourSelector::ColourSelectorOptions::editableColour),
+    m_mod_button (MOD_BUTTON_TEXT),
+    m_clear_button (CLEAR_BUTTON_TEXT) {
 
 	for (int button = 0; button < NUM_BUTTONS; ++button) {
 		m_buttons[button] = std::make_unique<ColourButton> (button + 1);
@@ -15,30 +17,43 @@ MainComponent::MainComponent() :
 	}
 
 	addAndMakeVisible (m_colour_picker);
-	addAndMakeVisible (m_player_selector);
 	addAndMakeVisible (m_mod_button);
 	addAndMakeVisible (m_clear_button);
 
-	for (int player = 1; player <= 8; ++player) {
-		m_player_selector.addItem (std::to_string (player) + " (" + m_player_color_names[player] + ")", player);
-	}
-
-	m_player_selector.setSelectedId (1);
-
 	m_mod_button.onClick = [&]() {
-		m_colour_modder.modColour (m_player_selector.getSelectedId(), m_colour_picker.getCurrentColour());
+		m_colour_modder.createSpriteMod ({m_buttons[0]->getColour(),
+		                                  m_buttons[1]->getColour(),
+		                                  m_buttons[2]->getColour(),
+		                                  m_buttons[3]->getColour(),
+		                                  m_buttons[4]->getColour(),
+		                                  m_buttons[5]->getColour(),
+		                                  m_buttons[6]->getColour(),
+		                                  m_buttons[7]->getColour()},
+		                                 {m_buttons[8]->getColour(),
+		                                  m_buttons[9]->getColour(),
+		                                  m_buttons[10]->getColour(),
+		                                  m_buttons[11]->getColour(),
+		                                  m_buttons[12]->getColour(),
+		                                  m_buttons[13]->getColour(),
+		                                  m_buttons[14]->getColour(),
+		                                  m_buttons[15]->getColour()});
 	};
 
 	m_clear_button.onClick = [&]() {
 		m_colour_modder.removeMod();
+		for (int button = 0; button < NUM_BUTTONS; ++button)
+			m_buttons[button]->setColour (m_colour_modder.getColourFor (button));
+		setSelectedButton (0);
+		startEditingPlayer (0);
 	};
 
 	m_colour_picker.setColour (juce::ColourSelector::ColourIds::backgroundColourId, juce::Colours::black);
 	m_colour_picker.addChangeListener (this);
 
 	setSelectedButton (0);
+	startEditingPlayer (0);
 
-	setSize (600, 800);
+	setSize (600, 700);
 }
 
 MainComponent::~MainComponent() {
@@ -52,6 +67,10 @@ void MainComponent::changeListenerCallback (ChangeBroadcaster*) {
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g) {
 	g.fillAll (juce::Colours::black);
+
+	g.setColour (juce::Colours::white.withAlpha (0.3f));
+	g.setFont (15);
+	g.drawText (juce::String ("Version ") + juce::String (ProjectInfo::versionString), getLocalBounds().reduced (3, 3), juce::Justification::bottomRight);
 }
 
 void MainComponent::resized() {
@@ -59,19 +78,32 @@ void MainComponent::resized() {
 
 	m_colour_picker.setBounds (bounds.removeFromTop (juce::roundToInt (getHeight() * COLOR_PICKER_HEIGHT_PERCENT / 100.f)));
 
-	m_clear_button.setBounds (bounds.removeFromBottom (juce::roundToInt ((bounds.getHeight() / 4.0f))));
-	auto upper_bounds = bounds.removeFromBottom (juce::roundToInt (bounds.getHeight() / 3.0f));
-	m_player_selector.setBounds (upper_bounds.removeFromLeft (juce::roundToInt (upper_bounds.getWidth() / 2.0f)));
-	m_mod_button.setBounds (upper_bounds);
+	auto button_bounds = bounds.removeFromBottom (juce::roundToInt (bounds.getHeight() / 3.0f));
+	m_mod_button.setBounds (button_bounds.removeFromLeft (button_bounds.getWidth() / 2));
+	m_clear_button.setBounds (button_bounds);
+	const auto button_height = juce::roundToInt (getHeight() * 0.05f);
+	const auto button_width  = juce::roundToInt (getWidth() * 0.3);
+	m_clear_button.setBounds (m_clear_button.getBounds().withSizeKeepingCentre (button_width, button_height));
+	m_mod_button.setBounds (m_mod_button.getBounds().withSizeKeepingCentre (button_width, button_height));
 
+	positionColourButtons (bounds);
+}
+
+void MainComponent::positionColourButtons (juce::Rectangle<int> p_bounds) {
 	auto counter = 0;
-	auto width   = juce::roundToInt (bounds.getWidth() / (NUM_BUTTONS / 2));
-	auto height  = juce::roundToInt (bounds.getHeight() / 2);
-	for (int row = 0; row < NUM_BUTTONS / 2; ++row) {
-		auto button_bounds = bounds.removeFromLeft (width);
+	auto width   = juce::roundToInt (p_bounds.getWidth() / (NUM_PLAYERS / 2));
+	auto height  = juce::roundToInt (p_bounds.getHeight() / 2);
+	for (int row = 0; row < NUM_PLAYERS / 2; ++row) {
+		auto button_bounds = p_bounds.removeFromLeft (width).reduced (2, 2);
 
-		m_buttons[counter++]->setBounds (button_bounds.removeFromTop (height).reduced (1, 1));
-		m_buttons[counter++]->setBounds (button_bounds.removeFromTop (height).reduced (1, 1));
+		auto local_bounds = button_bounds.removeFromTop (height).reduced (1, 1);
+		m_buttons[counter]->setBounds (local_bounds.removeFromLeft (width / 2));
+		m_buttons[counter + NUM_PLAYERS]->setBounds (local_bounds.removeFromLeft (width / 2));
+		++counter;
+		local_bounds = button_bounds.removeFromTop (height).reduced (1, 1);
+		m_buttons[counter]->setBounds (local_bounds.removeFromLeft (width / 2));
+		m_buttons[counter + NUM_PLAYERS]->setBounds (local_bounds.removeFromLeft (width / 2));
+		++counter;
 	}
 }
 

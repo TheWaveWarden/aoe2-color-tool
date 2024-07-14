@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(AoE2ColorTool VERSION 0.0.1)
+project(AoE2ColorTool VERSION 1.1.0)
 
 add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
 juce_add_gui_app(AoE2ColorTool
@@ -22,6 +22,8 @@ target_compile_definitions(AoE2ColorTool
         JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:AoE2ColorTool,JUCE_PRODUCT_NAME>"
         JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:AoE2ColorTool,JUCE_VERSION>")
 
+include_directories(json/include)
+
 juce_add_binary_data(GuiAppData
     SOURCES 
         Assets/50500.bina
@@ -29,6 +31,7 @@ juce_add_binary_data(GuiAppData
         Assets/info.json
         Assets/playercolor_red.pal
         Assets/thumbnail.jpg
+        Assets/spritecolors.json
 )
 
 target_link_libraries(AoE2ColorTool

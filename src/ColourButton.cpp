@@ -18,17 +18,18 @@ void ColourButton::paint (juce::Graphics& g) {
 	static constexpr auto corner = 3.0f;
 
 	g.setColour (m_colour);
-	g.fillRoundedRectangle (getLocalBounds().toFloat(), corner);
+	g.fillRoundedRectangle (getLocalBounds().toFloat().reduced (stroke / 2.0f), corner);
 	if (m_selected)
 		g.setColour (juce::Colours::white);
 	else
 		g.setColour (m_highlight ? juce::Colours::yellow : juce::Colours::black);
 
-	g.drawRoundedRectangle (getLocalBounds().toFloat().reduced (stroke / 2), corner, stroke);
+	g.drawRoundedRectangle (getLocalBounds().toFloat().reduced (stroke / 2.0f), corner, stroke);
 
 	g.setColour (m_colour.getPerceivedBrightness() > 0.5f ? juce::Colours::black : juce::Colours::white);
-	g.setFont (juce::roundToInt (getHeight() * 0.3f));
-	g.drawText (juce::String (m_number), getLocalBounds().reduced (5, 5), juce::Justification::topLeft);
+	g.setFont (getHeight() * 0.2f);
+	juce::String text = (m_number > 8 ? (juce::String ("Outline ") + juce::String (m_number - 8)) : (juce::String ("Player ") + juce::String (m_number)));
+	g.drawText (text, getLocalBounds().reduced (5, 5), juce::Justification::topLeft);
 }
 
 void ColourButton::mouseMove (const juce::MouseEvent&) {
