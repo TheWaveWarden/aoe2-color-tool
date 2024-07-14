@@ -5,7 +5,7 @@ A tool to easily modify player colors in Age of Empires II: Definitive Edition
 
 ## Just here to use the tool?
 
-See releases page to the right if you just want to download the tool.
+See [releases page](https://github.com/TheWaveWarden/aoe2-color-tool/releases) to the right and download the latest `AoE2ColorTool.zip` if you just want to download the tool.
 
 ## Building the tool from source
 This tool uses JUCE and C++ to build a standalone modding tool. Please make sure you have installed:
