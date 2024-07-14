@@ -1,12 +1,30 @@
-# === WARNING ===
-As of the latest build of AoE2:DE (09/2022), this tool doesn't seem to work anymore.
-
 # aoe2-color-tool
 A tool to easily modify player colors in Age of Empires II: Definitive Edition
 ![alt text](screenshot.png)
 ![alt text](screenshot_app.png)
 
-The current executable is found in the directory
+## Just here to use the tool?
+
+See releases page to the right if you just want to download the tool.
+
+## Building the tool from source
+This tool uses JUCE and C++ to build a standalone modding tool. Please make sure you have installed:
+- git
+- CMake
+- Visual Studio Community
+
+Open a terminal and clone this repo **with submodules**
 ```
-Builds/VisualStudio2019/x64/Release/App/AoE2 Custom Colors.exe
+git clone git@github.com:TheWaveWarden/aoe2-color-tool.git --recurse-submodules
+cd aoe2-color-tool
+```
+
+Configure the project
+```
+cmake -B build -D CMAKE_BUILD_TYPE=Debug
+```
+
+Build the project
+```
+cmake --build build --config Debug
 ```
