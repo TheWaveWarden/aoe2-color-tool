@@ -395,7 +395,7 @@ void ColourModder::modColour (int p_id, juce::Colour p_col) {
 
 	//create backup of bina file to read from (contains healthbar colors)
 	auto bina_original = getBinaFileLocation().getChildFile ("50500.bina");
-	auto bina_tmp      = getBinaFileLocation().getChildFile ("50500_original.bina");
+	auto bina_tmp      = getBinaFileLocation().getChildFile ("50500_tmp.bina");
 	bina_original.copyFileTo (bina_tmp);
 
 	ifs = std::ifstream (bina_tmp.getFullPathName().toStdString());
@@ -470,6 +470,13 @@ void ColourModder::createModSkeleton() {
 	output_file_bina_stream.setPosition (0);
 	output_file_bina_stream.write (bina_stream.getData(), bina_stream.getDataSize());
 	output_file_bina_stream.flush();
+
+	juce::MemoryInputStream bina_orig_stream (BinaryData::_50500_bina, BinaryData::_50500_binaSize, false);
+	auto output_file_bina_original = interface_dir.getChildFile ("50500_original.bina");
+	juce::FileOutputStream output_file_bina_original_stream (output_file_bina_original);
+	output_file_bina_original_stream.setPosition (0);
+	output_file_bina_original_stream.write (bina_orig_stream.getData(), bina_orig_stream.getDataSize());
+	output_file_bina_original_stream.flush();
 
 	//copy over thumbnail
 	juce::MemoryInputStream thumbnail_stream (BinaryData::thumbnail_jpg, BinaryData::thumbnail_jpgSize, false);

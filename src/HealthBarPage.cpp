@@ -3,7 +3,7 @@
 HealthBarPage::HealthBarPage (ColourModder& p_modder) :
     m_modder (p_modder),
     m_open_folder_button ("Open Folder"),
-    m_cancel_button ("Cancel") {
+    m_cancel_button ("Back") {
 
 	addAndMakeVisible (m_open_folder_button);
 	addAndMakeVisible (m_cancel_button);
