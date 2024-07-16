@@ -403,9 +403,13 @@ void ColourModder::modColour (int p_id, juce::Colour p_col) {
 
 	// healbar backgrounds are always black, so we need to lighten up the colour a bit
 	RgbInt healthbar_rgb;
-	juce::Colour col = p_col;
-	while (col.getPerceivedBrightness() < 0.4f)
-		col = col.withBrightness (col.getBrightness() + 0.05f);
+	juce::Colour col   = p_col;
+	const auto col_inc = 0.05f;
+	int counter        = 0;
+	while (col.getPerceivedBrightness() < 0.4f && col.getBrightness() < 1.0f - col_inc && counter < 100) {
+		++counter;
+		col = col.withBrightness (col.getBrightness() + col_inc);
+	}
 	healthbar_rgb.r = col.getRed();
 	healthbar_rgb.g = col.getGreen();
 	healthbar_rgb.b = col.getBlue();
