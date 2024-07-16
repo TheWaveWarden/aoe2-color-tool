@@ -3,6 +3,7 @@
 #include "ColourButton.h"
 #include "ColourModder.h"
 #include <JuceHeader.h>
+#include "HealthBarPage.h"
 #include <map>
 
 #define COLOR_PICKER_HEIGHT_PERCENT 70
@@ -37,6 +38,7 @@ private:
 	juce::ColourSelector m_colour_picker;
 	juce::TextButton m_mod_button;
 	juce::TextButton m_clear_button;
+    HealthBarPage m_health_bar_page;
 
 	ColourModder m_colour_modder;
 

@@ -3,7 +3,8 @@
 MainComponent::MainComponent() :
     m_colour_picker (juce::ColourSelector::ColourSelectorOptions::showColourAtTop | juce::ColourSelector::ColourSelectorOptions::showColourspace | juce::ColourSelector::ColourSelectorOptions::editableColour),
     m_mod_button (MOD_BUTTON_TEXT),
-    m_clear_button (CLEAR_BUTTON_TEXT) {
+    m_clear_button (CLEAR_BUTTON_TEXT),
+    m_health_bar_page (m_colour_modder) {
 
 	for (int button = 0; button < NUM_BUTTONS; ++button) {
 		m_buttons[button] = std::make_unique<ColourButton> (button + 1);
@@ -19,6 +20,9 @@ MainComponent::MainComponent() :
 	addAndMakeVisible (m_colour_picker);
 	addAndMakeVisible (m_mod_button);
 	addAndMakeVisible (m_clear_button);
+	addChildComponent (m_health_bar_page);
+
+	m_colour_modder.onModHealthBarColours = [&]() { m_health_bar_page.setVisible (true); };
 
 	m_mod_button.onClick = [&]() {
 		m_colour_modder.createSpriteMod ({m_buttons[0]->getColour(),
@@ -66,7 +70,7 @@ void MainComponent::changeListenerCallback (ChangeBroadcaster*) {
 
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g) {
-	g.fillAll (juce::Colours::black);
+	g.fillAll (BACKGROUND_COLOUR);
 
 	g.setColour (juce::Colours::white.withAlpha (0.3f));
 	g.setFont (15);
@@ -75,6 +79,7 @@ void MainComponent::paint (juce::Graphics& g) {
 
 void MainComponent::resized() {
 	auto bounds = getLocalBounds();
+	m_health_bar_page.setBounds (bounds);
 
 	m_colour_picker.setBounds (bounds.removeFromTop (juce::roundToInt (getHeight() * COLOR_PICKER_HEIGHT_PERCENT / 100.f)));
 

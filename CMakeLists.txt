@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(AoE2ColorTool VERSION 1.1.0)
+project(AoE2ColorTool VERSION 1.2.0)
 
 add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
 juce_add_gui_app(AoE2ColorTool
@@ -12,7 +12,8 @@ target_sources(AoE2ColorTool
         src/Main.cpp
         src/MainComponent.cpp
         src/ColourModder.cpp
-        src/ColourButton.cpp)
+        src/ColourButton.cpp
+        src/HealthBarPage.cpp)
 
 target_compile_definitions(AoE2ColorTool
     PRIVATE

@@ -234,12 +234,23 @@ void ColourModder::createSpriteMod (std::array<juce::Colour, 8> p_team_colours, 
 	auto output_file = palette_folder.getChildFile ("spritecolors.json");
 	output_file.replaceWithText (data.dump (4));
 
-	juce::String message = "Successfully created a local mod. The mod will show up in your in-game mod browser. You candisable it there anytime or remove it here in the tool.\n\nRestart AoE2:DE for the mod to be picked up.";
+	juce::String message = "Successfully created a local mod. The mod will show up in your in-game mod browser. You can disable it there anytime or remove it here in the tool.\n\nRestart AoE2:DE for the mod to be picked up.\n\n\nWould you like to do an extra step to mod the health bar colours as well?";
 
-	juce::AlertWindow::showMessageBox (
-	    juce::AlertWindow::AlertIconType::InfoIcon,
-	    "Created Mod Successfully! 14!",
-	    message);
+	juce::MessageBoxOptions options;
+	options = options.withMessage (message);
+	options = options.withTitle ("Created Mod Successfully!");
+	options = options.withButton ("No thanks");
+	options = options.withButton ("Mod Health Bars");
+
+	auto ret = juce::AlertWindow::show (options);
+
+	if (ret == 0)
+		onModHealthBarColours();
+
+	//juce::AlertWindow::showMessageBox (
+	//    juce::AlertWindow::AlertIconType::InfoIcon,
+	//    "Created Mod Successfully! 14!",
+	//    message);
 }
 
 void ColourModder::modColour (int p_id, juce::Colour p_col) {
@@ -383,17 +394,26 @@ void ColourModder::modColour (int p_id, juce::Colour p_col) {
 	} //todo remove
 
 	//create backup of bina file to read from (contains healthbar colors)
-	auto bina_original = m_local_mods_folder.getChildFile (MOD_FOLDER_NAME).getChildFile ("resources").getChildFile ("_common").getChildFile ("drs").getChildFile ("interface").getChildFile ("50500.bina");
-	auto bina_tmp      = m_local_mods_folder.getChildFile (MOD_FOLDER_NAME).getChildFile ("resources").getChildFile ("_common").getChildFile ("drs").getChildFile ("interface").getChildFile ("50500_tmp.bina");
+	auto bina_original = getBinaFileLocation().getChildFile ("50500.bina");
+	auto bina_tmp      = getBinaFileLocation().getChildFile ("50500_original.bina");
 	bina_original.copyFileTo (bina_tmp);
 
 	ifs = std::ifstream (bina_tmp.getFullPathName().toStdString());
 	ofs = std::ofstream (bina_original.getFullPathName().toStdString());
 
+	// healbar backgrounds are always black, so we need to lighten up the colour a bit
+	RgbInt healthbar_rgb;
+	juce::Colour col = p_col;
+	while (col.getPerceivedBrightness() < 0.4f)
+		col = col.withBrightness (col.getBrightness() + 0.05f);
+	healthbar_rgb.r = col.getRed();
+	healthbar_rgb.g = col.getGreen();
+	healthbar_rgb.b = col.getBlue();
+
 	size_t line_counter = 1;
 	while (std::getline (ifs, line)) {
 		if (line_counter == m_healthbar_position_in_bina_file[p_id]) {
-			ofs << selected_rgb.r << " " << selected_rgb.g << " " << selected_rgb.b << std::endl;
+			ofs << healthbar_rgb.r << " " << healthbar_rgb.g << " " << healthbar_rgb.b << std::endl;
 		} else {
 			ofs << line << std::endl;
 		}
@@ -402,6 +422,10 @@ void ColourModder::modColour (int p_id, juce::Colour p_col) {
 	}
 	ifs.close();
 	ofs.close();
+}
+
+juce::File ColourModder::getBinaFileLocation() const {
+	return m_local_mods_folder.getChildFile (MOD_FOLDER_NAME).getChildFile ("resources").getChildFile ("_common").getChildFile ("drs").getChildFile ("interface");
 }
 
 bool ColourModder::modFolderExists() {

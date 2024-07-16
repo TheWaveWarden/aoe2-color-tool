@@ -29,6 +29,10 @@ public:
 
 	juce::Colour getColourFor (int p_index) const;
 
+    juce::File getBinaFileLocation() const;
+
+    std::function<void()> onModHealthBarColours;
+
 private:
 	juce::File m_local_mods_folder;
 	std::map<int, std::string> m_player_color_names = {{1, "Blue"}, {2, "Red"}, {3, "Green"}, {4, "Yellow"}, {5, "Teal"}, {6, "Purple"}, {7, "Grey"}, {8, "Orange"}};

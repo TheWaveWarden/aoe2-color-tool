@@ -17,8 +17,11 @@ void ColourButton::paint (juce::Graphics& g) {
 	static constexpr auto stroke = 1.0f;
 	static constexpr auto corner = 3.0f;
 
+	// background
 	g.setColour (m_colour);
 	g.fillRoundedRectangle (getLocalBounds().toFloat().reduced (stroke / 2.0f), corner);
+
+	// border
 	if (m_selected)
 		g.setColour (juce::Colours::white);
 	else
@@ -26,6 +29,7 @@ void ColourButton::paint (juce::Graphics& g) {
 
 	g.drawRoundedRectangle (getLocalBounds().toFloat().reduced (stroke / 2.0f), corner, stroke);
 
+	// text
 	g.setColour (m_colour.getPerceivedBrightness() > 0.5f ? juce::Colours::black : juce::Colours::white);
 	g.setFont (getHeight() * 0.2f);
 	juce::String text = (m_number > 8 ? (juce::String ("Outline ") + juce::String (m_number - 8)) : (juce::String ("Player ") + juce::String (m_number)));
